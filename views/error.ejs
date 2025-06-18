@@ -1,4 +1,5 @@
-<%- include('layout', { body: \`
+<%
+const pageContent = `
     <section class="contact-hero" style="min-height: 80vh; display: flex; align-items: center;">
         <div class="container">
             <div class="contact-hero-content" style="text-align: center;">
@@ -20,14 +21,14 @@
                     <button onclick="location.reload()" class="btn btn-outline btn-large">Try Again</button>
                 </div>
                 
-                <% if (typeof error !== 'undefined' && error.stack) { %>
+                ${typeof error !== 'undefined' && error.stack ? `
                     <div style="margin-top: var(--space-16); text-align: left; max-width: 600px; margin-left: auto; margin-right: auto;">
                         <details style="background: rgba(255,255,255,0.05); padding: var(--space-4); border-radius: var(--border-radius); border: 1px solid rgba(255,255,255,0.1);">
                             <summary style="color: var(--primary); cursor: pointer; margin-bottom: var(--space-2);">Error Details (Development Mode)</summary>
-                            <pre style="color: var(--gray-300); font-size: var(--font-size-sm); overflow-x: auto; white-space: pre-wrap;"><%= error.stack %></pre>
+                            <pre style="color: var(--gray-300); font-size: var(--font-size-sm); overflow-x: auto; white-space: pre-wrap;">${error.stack}</pre>
                         </details>
                     </div>
-                <% } %>
+                ` : ''}
             </div>
         </div>
     </section>
@@ -98,4 +99,7 @@
             animate();
         });
     </script>
-\` }) %>
+`;
+%>
+
+<%- include('layout', { body: pageContent }) %>
