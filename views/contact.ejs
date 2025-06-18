@@ -1,0 +1,158 @@
+<%- include('layout', { body: \`
+    <section class="contact-hero">
+        <div class="container">
+            <div class="contact-hero-content">
+                <h1 class="page-title">Get In <span class="gradient-text">Touch</span></h1>
+                <p class="page-description">
+                    Ready to transform your business? Let's discuss your project and create something amazing together.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h2>Let's Start a Conversation</h2>
+                    <p>We're here to help you bring your digital vision to life. Choose the best way to reach us.</p>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <div class="icon-3d" data-icon="mail"></div>
+                            </div>
+                            <div class="method-content">
+                                <h3>Email Us</h3>
+                                <p>info@tagadplatforms.com</p>
+                                <span>We'll respond within 24 hours</span>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <div class="icon-3d" data-icon="phone"></div>
+                            </div>
+                            <div class="method-content">
+                                <h3>Call Us</h3>
+                                <p>+1 (555) 123-4567</p>
+                                <span>Mon-Fri, 9 AM - 6 PM EST</span>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <div class="icon-3d" data-icon="map-pin"></div>
+                            </div>
+                            <div class="method-content">
+                                <h3>Visit Us</h3>
+                                <p>Tech District, Innovation Hub</p>
+                                <span>Schedule an appointment</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form-container">
+                    <% if (success) { %>
+                        <div class="alert alert-success">
+                            <div class="alert-icon">✓</div>
+                            <div class="alert-content">
+                                <h3>Message Sent Successfully!</h3>
+                                <p>Thank you for contacting us. We'll get back to you within 24 hours.</p>
+                            </div>
+                        </div>
+                    <% } %>
+                    
+                    <% if (error) { %>
+                        <div class="alert alert-error">
+                            <div class="alert-icon">⚠</div>
+                            <div class="alert-content">
+                                <h3>Error Sending Message</h3>
+                                <p>Please try again or contact us directly via email or phone.</p>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <form class="contact-form" action="/contact/submit" method="POST" id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Full Name *</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="company">Company Name</label>
+                                <input type="text" id="company" name="company">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="service">Service Needed *</label>
+                                <select id="service" name="service" required>
+                                    <option value="">Select a service</option>
+                                    <option value="E-Commerce Development">E-Commerce Development</option>
+                                    <option value="Business Websites">Business Websites</option>
+                                    <option value="Social Media Marketing">Social Media Marketing</option>
+                                    <option value="Business Software">Business Software</option>
+                                    <option value="Email Marketing">Email Marketing</option>
+                                    <option value="Salesforce">Salesforce</option>
+                                    <option value="ERP Software">ERP Software</option>
+                                    <option value="Project Management">Project Management Software</option>
+                                    <option value="Mobile App Development">Mobile App Development</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="budget">Project Budget</label>
+                                <select id="budget" name="budget">
+                                    <option value="">Select budget range</option>
+                                    <option value="Under $5K">Under $5,000</option>
+                                    <option value="$5K - $15K">$5,000 - $15,000</option>
+                                    <option value="$15K - $50K">$15,000 - $50,000</option>
+                                    <option value="$50K+">$50,000+</option>
+                                    <option value="Not Sure">Not Sure</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="timeline">Project Timeline</label>
+                            <select id="timeline" name="timeline">
+                                <option value="">Select timeline</option>
+                                <option value="ASAP">ASAP</option>
+                                <option value="1-3 months">1-3 months</option>
+                                <option value="3-6 months">3-6 months</option>
+                                <option value="6+ months">6+ months</option>
+                                <option value="Flexible">Flexible</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Project Details *</label>
+                            <textarea id="message" name="message" rows="6" required placeholder="Tell us about your project requirements, goals, and any specific features you need..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-large btn-full">
+                            <span class="btn-text">Send Message</span>
+                            <div class="btn-loader">
+                                <div class="loader-spinner"></div>
+                            </div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+\`, pageScript: 'contact' }) %>

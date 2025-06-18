@@ -1,0 +1,169 @@
+<%- include('layout', { body: \`
+    <!-- Hero Section with 3D Background -->
+    <section class="hero" id="hero">
+        <div class="hero-bg" id="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="hero-title-line">Transform Your Business</span>
+                    <span class="hero-title-line">with <span class="gradient-text">Innovative</span> Solutions</span>
+                </h1>
+                <p class="hero-description">
+                    We craft cutting-edge software solutions, stunning websites, and powerful mobile applications 
+                    that drive growth and digital transformation for modern businesses.
+                </p>
+                <div class="hero-buttons">
+                    <a href="/contact" class="btn btn-primary btn-large">Start Your Project</a>
+                    <a href="/portfolio" class="btn btn-secondary btn-large">View Our Work</a>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">150+</div>
+                    <div class="stat-label">Projects Completed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Happy Clients</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5+</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-line"></div>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our <span class="gradient-text">Services</span></h2>
+                <p class="section-description">
+                    Comprehensive technology solutions tailored to your business needs
+                </p>
+            </div>
+            
+            <div class="services-grid">
+                <% services.forEach((service, index) => { %>
+                    <div class="service-card" data-service="<%= service.name.toLowerCase().replace(/\\\\s+/g, '-') %>" data-index="<%= index %>">
+                        <div class="service-card-inner">
+                            <div class="service-icon service-icon-<%= service.color %>">
+                                <div class="icon-3d" data-icon="<%= service.icon %>"></div>
+                            </div>
+                            <h3 class="service-title"><%= service.name %></h3>
+                            <p class="service-description"><%= service.description %></p>
+                            <div class="service-features">
+                                <% if (service.name === 'E-Commerce Development') { %>
+                                    <ul>
+                                        <li>Custom shopping cart solutions</li>
+                                        <li>Payment gateway integration</li>
+                                        <li>Inventory management systems</li>
+                                        <li>Mobile-responsive design</li>
+                                    </ul>
+                                <% } else if (service.name === 'Mobile App Development') { %>
+                                    <ul>
+                                        <li>Native iOS & Android apps</li>
+                                        <li>Cross-platform solutions</li>
+                                        <li>UI/UX design excellence</li>
+                                        <li>App store optimization</li>
+                                    </ul>
+                                <% } else if (service.name === 'Business Software') { %>
+                                    <ul>
+                                        <li>Custom software development</li>
+                                        <li>Database design & optimization</li>
+                                        <li>API development & integration</li>
+                                        <li>Cloud-based solutions</li>
+                                    </ul>
+                                <% } else { %>
+                                    <ul>
+                                        <li>Expert consultation</li>
+                                        <li>Custom implementation</li>
+                                        <li>Ongoing support</li>
+                                        <li>Performance optimization</li>
+                                    </ul>
+                                <% } %>
+                            </div>
+                            <a href="/contact" class="service-cta">Get Started →</a>
+                        </div>
+                        <div class="service-glow"></div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-choose-us" id="why-choose-us">
+        <div class="container">
+            <div class="why-choose-content">
+                <div class="why-choose-text">
+                    <h2 class="section-title">Why Choose <span class="gradient-text">Tagad Platforms</span>?</h2>
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <div class="icon-3d" data-icon="zap"></div>
+                            </div>
+                            <div class="feature-content">
+                                <h3>Lightning Fast Development</h3>
+                                <p>Agile methodologies and cutting-edge tools ensure rapid project delivery without compromising quality.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <div class="icon-3d" data-icon="shield"></div>
+                            </div>
+                            <div class="feature-content">
+                                <h3>Enterprise Security</h3>
+                                <p>Bank-level security protocols and data protection measures keep your business safe and compliant.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <div class="icon-3d" data-icon="trending-up"></div>
+                            </div>
+                            <div class="feature-content">
+                                <h3>Scalable Solutions</h3>
+                                <p>Future-proof architecture that grows with your business and adapts to changing market demands.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <div class="icon-3d" data-icon="headphones"></div>
+                            </div>
+                            <div class="feature-content">
+                                <h3>24/7 Support</h3>
+                                <p>Round-the-clock technical support and maintenance to ensure your systems run smoothly.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="why-choose-visual">
+                    <div class="visual-3d" id="why-choose-3d"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <div class="cta-bg" id="cta-bg"></div>
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Transform Your Business?</h2>
+                <p class="cta-description">
+                    Let's discuss your project and create something amazing together. 
+                    Get a free consultation and quote for your next digital venture.
+                </p>
+                <div class="cta-buttons">
+                    <a href="/contact" class="btn btn-primary btn-large">Start Your Project</a>
+                    <a href="tel:+15551234567" class="btn btn-outline btn-large">Call Us Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+\` }) %>

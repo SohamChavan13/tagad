@@ -1,0 +1,112 @@
+<%- include('layout', { body: \`
+    <section class="contact-hero" style="min-height: 80vh; display: flex; align-items: center;">
+        <div class="container">
+            <div class="contact-hero-content" style="text-align: center;">
+                <div style="margin-bottom: var(--space-8);">
+                    <div class="visual-3d" id="error-3d" style="width: 200px; height: 200px; margin: 0 auto var(--space-8);"></div>
+                </div>
+                <h1 class="page-title" style="font-size: var(--font-size-6xl); margin-bottom: var(--space-4);">
+                    4<span class="gradient-text">0</span>4
+                </h1>
+                <h2 style="font-size: var(--font-size-3xl); color: var(--white); margin-bottom: var(--space-6);">
+                    Page Not Found
+                </h2>
+                <p class="page-description" style="max-width: 500px; margin: 0 auto var(--space-8);">
+                    The page you're looking for doesn't exist or has been moved. 
+                    Let's get you back on track with our amazing services.
+                </p>
+                <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
+                    <a href="/" class="btn btn-primary btn-large">Go Home</a>
+                    <a href="/contact" class="btn btn-outline btn-large">Contact Us</a>
+                </div>
+                
+                <div style="margin-top: var(--space-16);">
+                    <h3 style="color: var(--white); margin-bottom: var(--space-6); font-size: var(--font-size-xl);">
+                        Popular Pages
+                    </h3>
+                    <div style="display: flex; gap: var(--space-6); justify-content: center; flex-wrap: wrap;">
+                        <a href="/services" class="nav-link">Our Services</a>
+                        <a href="/portfolio" class="nav-link">Portfolio</a>
+                        <a href="/about" class="nav-link">About Us</a>
+                        <a href="/contact" class="nav-link">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Add 404-specific 3D animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('error-3d');
+            if (!container || !window.THREE) return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            
+            renderer.setSize(200, 200);
+            renderer.setClearColor(0x000000, 0);
+            container.appendChild(renderer.domElement);
+
+            // Create broken/glitched geometry for 404 effect
+            const geometry = new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+            const material = new THREE.MeshBasicMaterial({
+                color: 0xEF4444,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.8
+            });
+            
+            const cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+
+            // Add some floating particles
+            const particleGeometry = new THREE.BufferGeometry();
+            const particleCount = 50;
+            const positions = new Float32Array(particleCount * 3);
+            
+            for (let i = 0; i < particleCount * 3; i++) {
+                positions[i] = (Math.random() - 0.5) * 10;
+            }
+            
+            particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const particleMaterial = new THREE.PointsMaterial({
+                color: 0xEF4444,
+                size: 0.05,
+                transparent: true,
+                opacity: 0.6
+            });
+            
+            const particles = new THREE.Points(particleGeometry, particleMaterial);
+            scene.add(particles);
+
+            camera.position.z = 3;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Glitchy rotation for 404 effect
+                cube.rotation.x += 0.02 + Math.sin(Date.now() * 0.01) * 0.01;
+                cube.rotation.y += 0.02 + Math.cos(Date.now() * 0.01) * 0.01;
+                
+                // Randomly distort geometry vertices for glitch effect
+                const positions = geometry.attributes.position.array;
+                for (let i = 0; i < positions.length; i += 3) {
+                    if (Math.random() < 0.01) {
+                        positions[i] += (Math.random() - 0.5) * 0.1;
+                        positions[i + 1] += (Math.random() - 0.5) * 0.1;
+                        positions[i + 2] += (Math.random() - 0.5) * 0.1;
+                    }
+                }
+                geometry.attributes.position.needsUpdate = true;
+
+                particles.rotation.y += 0.005;
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+        });
+    </script>
+\` }) %>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <nav class="admin-sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Panel</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="/admin">Dashboard</a></li>
+                <li><a href="/admin/contacts" class="active">Contacts</a></li>
+                <li><a href="/" target="_blank">View Website</a></li>
+                <li>
+                    <form action="/admin/logout" method="POST" style="display: inline;">
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="admin-main">
+            <div class="admin-header">
+                <h1>Contact Management</h1>
+                <p>Manage and respond to customer inquiries</p>
+            </div>
+
+            <div class="admin-section">
+                <h2>All Contacts (<%= contacts.length %>)</h2>
+                
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Company</th>
+                                <th>Service</th>
+                                <th>Budget</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% contacts.forEach(contact => { %>
+                                <tr>
+                                    <td><%= new Date(contact.createdAt).toLocaleDateString() %></td>
+                                    <td><%= contact.name %></td>
+                                    <td><%= contact.email %></td>
+                                    <td><%= contact.company || 'N/A' %></td>
+                                    <td><%= contact.service %></td>
+                                    <td><%= contact.budget || 'N/A' %></td>
+                                    <td>
+                                        <span class="status-badge status-<%= contact.status %>">
+                                            <%= contact.status %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary" onclick="viewContact('<%= contact._id %>')">View</button>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <% if (totalPages > 1) { %>
+                    <div class="pagination">
+                        <% for (let i = 1; i <= totalPages; i++) { %>
+                            <a href="/admin/contacts?page=<%= i %>" 
+                               class="btn <%= currentPage === i ? 'btn-primary' : 'btn-outline' %>">
+                                <%= i %>
+                            </a>
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
+        </main>
+    </div>
+
+    <!-- Contact Detail Modal -->
+    <div id="contactModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Contact Details</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Contact details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function viewContact(contactId) {
+            try {
+                const response = await fetch(`/api/contacts/${contactId}`);
+                const contact = await response.json();
+                
+                const modalBody = document.getElementById('modalBody');
+                modalBody.innerHTML = `
+                    <div class="contact-details">
+                        <div class="detail-row">
+                            <strong>Name:</strong> ${contact.name}
+                        </div>
+                        <div class="detail-row">
+                            <strong>Email:</strong> <a href="mailto:${contact.email}">${contact.email}</a>
+                        </div>
+                        <div class="detail-row">
+                            <strong>Company:</strong> ${contact.company || 'N/A'}
+                        </div>
+                        <div class="detail-row">
+                            <strong>Phone:</strong> ${contact.phone || 'N/A'}
+                        </div>
+                        <div class="detail-row">
+                            <strong>Service:</strong> ${contact.service}
+                        </div>
+                        <div class="detail-row">
+                            <strong>Budget:</strong> ${contact.budget || 'N/A'}
+                        </div>
+                        <div class="detail-row">
+                            <strong>Timeline:</strong> ${contact.timeline || 'N/A'}
+                        </div>
+                        <div class="detail-row">
+                            <strong>Message:</strong>
+                            <p>${contact.message}</p>
+                        </div>
+                        <div class="detail-row">
+                            <strong>Status:</strong>
+                            <select id="statusSelect" onchange="updateStatus('${contact._id}')">
+                                <option value="new" ${contact.status === 'new' ? 'selected' : ''}>New</option>
+                                <option value="contacted" ${contact.status === 'contacted' ? 'selected' : ''}>Contacted</option>
+                                <option value="in-progress" ${contact.status === 'in-progress' ? 'selected' : ''}>In Progress</option>
+                                <option value="completed" ${contact.status === 'completed' ? 'selected' : ''}>Completed</option>
+                                <option value="closed" ${contact.status === 'closed' ? 'selected' : ''}>Closed</option>
+                            </select>
+                        </div>
+                        <div class="detail-row">
+                            <strong>Notes:</strong>
+                            <textarea id="notesField" rows="3" placeholder="Add internal notes...">${contact.notes || ''}</textarea>
+                            <button class="btn btn-primary" onclick="updateNotes('${contact._id}')">Save Notes</button>
+                        </div>
+                        <div class="detail-row">
+                            <strong>Created:</strong> ${new Date(contact.createdAt).toLocaleString()}
+                        </div>
+                        <div class="detail-row">
+                            <strong>Updated:</strong> ${new Date(contact.updatedAt).toLocaleString()}
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('contactModal').style.display = 'block';
+            } catch (error) {
+                console.error('Error loading contact:', error);
+                alert('Error loading contact details');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+
+        async function updateStatus(contactId) {
+            const status = document.getElementById('statusSelect').value;
+            
+            try {
+                await fetch(`/api/contacts/${contactId}/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status })
+                });
+                
+                // Refresh the page to show updated status
+                location.reload();
+            } catch (error) {
+                console.error('Error updating status:', error);
+                alert('Error updating status');
+            }
+        }
+
+        async function updateNotes(contactId) {
+            const notes = document.getElementById('notesField').value;
+            
+            try {
+                await fetch(`/api/contacts/${contactId}/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ notes })
+                });
+                
+                alert('Notes updated successfully');
+            } catch (error) {
+                console.error('Error updating notes:', error);
+                alert('Error updating notes');
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('contactModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+
+    <style>
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: 5% auto;
+            padding: 0;
+            border-radius: var(--border-radius-lg);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            background: var(--gray-50);
+            padding: var(--space-4) var(--space-6);
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: var(--space-6);
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-4);
+        }
+
+        .detail-row {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+
+        .detail-row strong {
+            color: var(--gray-700);
+            font-weight: 600;
+        }
+
+        .detail-row textarea,
+        .detail-row select {
+            padding: var(--space-2);
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            font-family: inherit;
+        }
+
+        .close {
+            color: var(--gray-500);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: var(--gray-700);
+        }
+
+        .pagination {
+            display: flex;
+            gap: var(--space-2);
+            justify-content: center;
+            margin-top: var(--space-6);
+        }
+    </style>
+</body>
+</html>

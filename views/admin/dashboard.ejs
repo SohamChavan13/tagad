@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <nav class="admin-sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Panel</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="/admin" class="active">Dashboard</a></li>
+                <li><a href="/admin/contacts">Contacts</a></li>
+                <li><a href="/" target="_blank">View Website</a></li>
+                <li>
+                    <form action="/admin/logout" method="POST" style="display: inline;">
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="admin-main">
+            <div class="admin-header">
+                <h1>Dashboard</h1>
+                <p>Welcome to your admin dashboard</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <h3><%= stats.total %></h3>
+                        <p>Total Contacts</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-content">
+                        <h3><%= stats.new %></h3>
+                        <p>New Contacts</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-content">
+                        <h3><%= stats.monthly %></h3>
+                        <p>This Month</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h2>Recent Contacts</h2>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Service</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% recentContacts.forEach(contact => { %>
+                                <tr>
+                                    <td><%= contact.name %></td>
+                                    <td><%= contact.email %></td>
+                                    <td><%= contact.service %></td>
+                                    <td>
+                                        <span class="status-badge status-<%= contact.status %>">
+                                            <%= contact.status %>
+                                        </span>
+                                    </td>
+                                    <td><%= new Date(contact.createdAt).toLocaleDateString() %></td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+                <a href="/admin/contacts" class="btn btn-primary">View All Contacts</a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
