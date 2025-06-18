@@ -35,7 +35,10 @@ app.use('/api', apiRoutes);
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).render('404', { title: 'Page Not Found' });
+  res.status(404).render('404', { 
+    title: 'Page Not Found',
+    currentPage: '404'
+  });
 });
 
 // Error handler
@@ -43,6 +46,7 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).render('error', { 
     title: 'Server Error',
+    currentPage: 'error',
     error: process.env.NODE_ENV === 'development' ? err : {}
   });
 });
